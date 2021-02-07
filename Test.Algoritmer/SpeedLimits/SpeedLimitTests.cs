@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Algoritmer.SpeedLimits;
 
 namespace Test.Algoritmer.SpeedLimits
 {
     [TestClass]
-    public class SpeedLimitTests
+    public class SpeedLimitTests : TestBase
     {
         [TestMethod]
         public void OneGroup_OneInput()
@@ -42,16 +41,6 @@ namespace Test.Algoritmer.SpeedLimits
             SpeedLimit.Calculate(consoleFaker);
 
             AssertOutput(expected, consoleFaker.Output);
-        }
-
-        private static void AssertOutput(string[] expectedArray, IReadOnlyList<string> actualArray)
-        {
-            int index = 0;
-            foreach (string expected in expectedArray)
-            {
-                Assert.AreEqual(expected, actualArray[index], $"Wrong at index {index}");
-                index++;
-            }
         }
     }
 }

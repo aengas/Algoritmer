@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Algoritmer;
 
 namespace Test.Algoritmer
@@ -20,12 +21,13 @@ namespace Test.Algoritmer
         public string ReadLine()
         {
             m_inputIndex++;
-            return m_input[m_inputIndex - 1];
+            return m_inputIndex > m_input.Length ? null : m_input[m_inputIndex - 1];
         }
 
         public void WriteLine(string value)
         {
             Output.Add(value);
+            Debug.WriteLine(value);
         }
     }
 }
