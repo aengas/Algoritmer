@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Algoritmer
+namespace Algoritmer.CatchThePlanes
 {
-    public class Program
+    public static class CatchThePlane
     {
         private static List<Node> s_pathList;
-
-        public static void Main(string[] args)
+        
+        public static void Calculate(IConsole console)
         {
             // Steg 1: Les input
-            (int pathCount, int stationCount, long maxArriveTime, List<Node> pathList) input = LoadInput();
+            (int pathCount, int stationCount, long maxArriveTime, List<Node> pathList) input = LoadInput(console);
             s_pathList = input.pathList;
-
+            
             // Steg 2: Lag en virtuell initiell node
             var initNode = new Node(0, 0, 0, -1, 1);
-
+            
             // Steg 3: Kjør metoden for å lage treet
             BuildTree(initNode);
-
+            
             // Steg 4: Kjør metoden som skal beregne sannsynlighet
-            Console.WriteLine(CalculateProbability(initNode).ToString(CultureInfo.InvariantCulture));
+            console.WriteLine(CalculateProbability(initNode).ToString(CultureInfo.InvariantCulture));
         }
 
         // Bygg et tre fra en rutetabell
@@ -33,7 +33,7 @@ namespace Algoritmer
             {
                 // Fallback finner alle veier som starter fra den siste avgangen og legger alle til det høyre sub-treet
                 List<Node> rightStations = FindNodeStartAs(node.StartStation, node.StartTime);
-
+                
                 // Finn alle rutene som starter på den nåværende stasjon og velg den første som det venstre sub-treet
                 List<Node> leftStations = FindNodeStartAs(node.EndStation, node.EndTime);
                 Node leftNode = null;
@@ -41,7 +41,7 @@ namespace Algoritmer
                 {
                     leftNode = leftStations[0];
                 }
-
+                
                 // Uansett hva sannsynligheten er, den første avgående bussen er satt til leftNode
                 if (node.EndStation != 1)
                 {
@@ -49,7 +49,7 @@ namespace Algoritmer
                 }
                 // Lag venstre tre rekursivt
                 BuildTree(node.LeftNode);
-
+                
                 // Siden avgangssansynligheten er mindre enn 1, så trengs andre hensyn slik at et høyre sub-tre blir laget
                 if (node.PT < 1)
                 {
@@ -60,7 +60,7 @@ namespace Algoritmer
                         BuildTree(rnode);
                     }
                 }
-
+                    
             }
         }
 
@@ -78,16 +78,16 @@ namespace Algoritmer
             return stations;
         }
 
-        private static decimal CalculateProbability(Node node)
+        private static double CalculateProbability(Node node)
         {
             if (node == null)
             {
                 return 0;
             }
-
+            
             // Finn maksimum sannsynlighet på det høyre sub-treet rekursivt, det vil si maks sannsynlighet for avgang feil og overgang
-            List<decimal> rightNodesP = new List<decimal>();
-            decimal rightP = 0;
+            List<double> rightNodesP = new List<double>();
+            double rightP = 0;
             if (node.RightNodes.Count > 0)
             {
                 foreach (Node rnode in node.RightNodes)
@@ -96,19 +96,23 @@ namespace Algoritmer
                     rightP = rightNodesP.Max();
                 }
             }
-
+            
             // Finn maksimum sannsynlighet på det venstre sub-treet rekursivt, det vil si den normale avgangssansynligheten
-            decimal leftP = 1;
+            double leftP = 1;
             if (node.LeftNode != null)
             {
                 leftP = CalculateProbability(node.LeftNode);
+            }
+            else
+            {
+                leftP = 1;
             }
             
             // Venstre sub-tre sin sannsynlighet pluss høyre sub-tre sin sannsynlighet
             return node.PT * leftP + node.PF * rightP;
         }
 
-        private static (int pathCount, int stationCount, long maxArriveTime, List<Node> pathList) LoadInput()
+        private static (int pathCount, int stationCount, long maxArriveTime, List<Node> pathList) LoadInput(IConsole console)
         {
             var pathList = new List<Node>();
             int ln = 0;
@@ -116,7 +120,7 @@ namespace Algoritmer
             int pathCount = 0;
             int stationCount = 0;
             long maxArriveTime = 0;
-            while ((line = Console.ReadLine()) != null)
+            while ((line = console.ReadLine()) != null)
             {
                 if (ln == 0)
                 {
@@ -133,8 +137,7 @@ namespace Algoritmer
                     else
                     {
                         string[] split = line.Split(' ');
-
-                        pathList.Add(new Node(long.Parse(split[0]), long.Parse(split[1]), long.Parse(split[2]), long.Parse(split[3]), decimal.Parse(split[4], CultureInfo.InvariantCulture)));
+                        pathList.Add(new Node(long.Parse(split[0]), long.Parse(split[1]), long.Parse(split[2]), long.Parse(split[3]), double.Parse(split[4], CultureInfo.InvariantCulture)));
                     }
                 }
 
@@ -151,12 +154,12 @@ namespace Algoritmer
         public long EndStation { get; }
         public long StartTime { get; }
         public long EndTime { get; }
-        public decimal PT { get; }
-        public decimal PF => 1 - PT;
+        public double PT { get; }
+        public double PF => 1 - PT;
         public Node LeftNode { get; set; }
         public List<Node> RightNodes { get; set; }
 
-        public Node(long startStation, long endStation, long startTime, long endTime, decimal pT)
+        public Node(long startStation, long endStation, long startTime, long endTime, double pT)
         {
             StartStation = startStation;
             EndStation = endStation;
