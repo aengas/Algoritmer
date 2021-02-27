@@ -1,42 +1,38 @@
-﻿using System.Collections.Generic;
-
-namespace Algoritmer.SpellingBees
+﻿namespace Algoritmer.SpellingBees
 {
     public static class SpellingBee
     {
-        public static void Calculate(IConsole console)
+        public static void Calculate(IConsole Console)
         {
-            string letters = console.ReadLine();
+            string letters = Console.ReadLine();
             char centerLetter = letters[0];
-            var letterHash = new HashSet<char>();
-            for (int i = 0; i < letters.Length; i++)
-            {
-                letterHash.Add(letters[i]);
-            }
-            int n = int.Parse(console.ReadLine());
+
+            int n = int.Parse(Console.ReadLine());
             for (int i = 0; i < n; i++)
             {
-                string word = console.ReadLine();
-                
+                string word = Console.ReadLine();
+
                 bool printWord = true;
-                if (word.Length < 4 || !word.Contains(centerLetter))
+                if (word.Length < 4)
                 {
                     continue;
                 }
+                bool centerLetterFound = false;
                 for (int j = 0; j < word.Length; j++)
                 {
-                    if (!letterHash.Contains(word[j]))
+                    if (!letters.Contains(word[j]))
                     {
                         printWord = false;
+
                         break;
                     }
+                    centerLetterFound = centerLetterFound || word[j] == centerLetter;
                 }
 
-                if (printWord)
+                if (printWord && centerLetterFound)
                 {
-                    console.WriteLine(word);
+                    Console.WriteLine(word);
                 }
-                
             }
         }
     }
