@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Algoritmer
+namespace Algoritmer.SpellingBees
 {
-    public class Program
+    public static class SpellingBee
     {
-        public static void Main(string[] args)
+        public static void Calculate(IConsole console)
         {
-            string letters = Console.ReadLine();
+            string letters = console.ReadLine();
             char centerLetter = letters[0];
             var letterHash = new HashSet<char>();
             for (int i = 0; i < letters.Length; i++)
             {
                 letterHash.Add(letters[i]);
             }
-            int n = int.Parse(Console.ReadLine());
+            int n = int.Parse(console.ReadLine());
             for (int i = 0; i < n; i++)
             {
-                string word = Console.ReadLine();
-
+                string word = console.ReadLine();
+                
                 bool printWord = true;
-                if (!word.Contains(centerLetter) || word.Length < 4)
+                if (word.Length < 4 || !word.Contains(centerLetter))
                 {
                     continue;
                 }
@@ -35,8 +34,9 @@ namespace Algoritmer
 
                 if (printWord)
                 {
-                    Console.WriteLine(word);
+                    console.WriteLine(word);
                 }
+                
             }
         }
     }
