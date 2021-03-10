@@ -15,7 +15,7 @@ namespace Algoritmer.CardTradings
 
             var deckSplit = Console.ReadLine().Split(new[] { ' ' });
 
-            var cards = new int[N];
+            var cards = new int[T];
             for (int i = 0; i < N; i++)
             {
                 cards[int.Parse(deckSplit[i]) - 1]++;
