@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
-namespace Algoritmer
+namespace Algoritmer.CastingSpells
 {
-    public class Program
+    public static class CastingSpell
     {
-        public static void Main(string[] args)
+        public static void Calculate(IConsole Console)
         {
             string s = Console.ReadLine();
             HashSet<long> lengths = new HashSet<long>();
@@ -25,14 +26,13 @@ namespace Algoritmer
             {
                 return 0;
             }
-
+            
             Tuple<long, long> indexes = Manacher(s);
             long length = indexes.Item2 - indexes.Item1;
 
             if ((length % 4 != 0))
             {
-                return 0;
-                ////length = 0;
+                //length = 0;
                 //var s1 = s.Substring((int)indexes.Item1, (int)length);
                 //return CalculateSpell(s.Replace(s1, string.Empty));
             }
@@ -100,7 +100,7 @@ namespace Algoritmer
                     maxi = i;
                 }
             }
-
+            
             return new Tuple<long, long>((maxi - k) / 2, (maxi + k) / 2);  // trekk ut løsning
         }
     }
