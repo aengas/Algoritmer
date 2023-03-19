@@ -4,34 +4,48 @@
     {
         public static void Calculate(IConsole Console)
         {
-            int numberOfStrings = int.Parse(Console.ReadLine());
-            string[] strings = new string[numberOfStrings + 1];
-            for (int i = 1; i <= numberOfStrings; i++)
+            int numStrs = int.Parse(Console.ReadLine());
+            StringNode[] array = new StringNode[numStrs];
+
+            for (int i = 0; i < numStrs; i++)
             {
-                strings[i] = Console.ReadLine();
+                array[i] = new StringNode(Console.ReadLine());
             }
 
-            string remainingString = "";
-            while (true)
+            int idx = 0;
+            for (int j = 0; j < numStrs -1; j++)
             {
-                string line = Console.ReadLine();
-                if (line == null)
-                {
-                    break;
-                }
-                string[] pair = line.Split(' ');
-                int a = int.Parse(pair[0]);
-                int b = int.Parse(pair[1]);
-                strings[a] += strings[b];
-                remainingString = strings[a];
-                strings[b] = "";
+                string[] aa = Console.ReadLine().Split(' ');
+                int a = int.Parse(aa[0]) - 1;
+                int b = int.Parse(aa[1]) - 1;
+                array[a].Append(array[b]);
+                idx = a;
             }
 
-            if (remainingString == "")
+            for (StringNode n = array[idx]; n != null; n = n.next)
             {
-                remainingString = strings[1];
+                Console.Write(n.s);
             }
-            Console.WriteLine(remainingString);
+            
+        }
+    }
+
+    public class StringNode
+    {
+        public readonly string s;
+        public StringNode last;
+        public StringNode next;
+
+        public StringNode(string s)
+        {
+            this.s = s;
+            last = this;
+        }
+
+        public void Append(StringNode s)
+        {
+            last.next = s;
+            last = s.last;
         }
     }
 }

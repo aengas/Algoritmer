@@ -29,5 +29,17 @@ namespace Test.Algoritmer.JoinStrings
 
             AssertOutput(expected, consoleFaker.Output);
         }
+
+        [TestMethod]
+        public void Test3()
+        {
+            string[] input = { "1", "test" };
+            var consoleFaker = new ConsoleFaker(input);
+            string[] expected = { "test" };
+
+            JoinStringsCalculator.Calculate(consoleFaker);
+
+            AssertOutput(expected, consoleFaker.Output);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Diagnostics;
 using Algoritmer;
 
@@ -28,6 +29,19 @@ namespace Test.Algoritmer
         {
             Output.Add(value);
             Debug.WriteLine(value);
+        }
+
+        public void Write(string value)
+        {
+            if (Output.Count > 0)
+            {
+                Output[0] += value;
+            }
+            else
+            {
+                Output.Add(value);
+            }
+            Debug.Write(value);
         }
     }
 }
