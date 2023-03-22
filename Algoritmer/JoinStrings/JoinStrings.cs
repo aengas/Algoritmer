@@ -1,4 +1,6 @@
-﻿namespace Algoritmer.JoinStrings
+﻿using System.Text;
+
+namespace Algoritmer.JoinStrings
 {
     public static class JoinStringsCalculator 
     {
@@ -15,37 +17,40 @@
             int idx = 0;
             for (int j = 0; j < numStrs -1; j++)
             {
-                string[] aa = Console.ReadLine().Split(' ');
-                int a = int.Parse(aa[0]) - 1;
-                int b = int.Parse(aa[1]) - 1;
+                string input = Console.ReadLine();
+                int spaceIndex = input.IndexOf(' ');
+                int a = int.Parse(input.Substring(0, spaceIndex)) - 1;
+                int b = int.Parse(input.Substring(spaceIndex + 1)) - 1;
                 array[a].Append(array[b]);
                 idx = a;
             }
 
-            for (StringNode n = array[idx]; n != null; n = n.next)
+            StringBuilder strb = new StringBuilder();
+            for (StringNode n = array[idx]; n != null; n = n.Next)
             {
-                Console.Write(n.s);
+                strb.Append(n.S);
+             
             }
-            
+            Console.WriteLine(strb.ToString());
         }
     }
 
     public class StringNode
     {
-        public readonly string s;
-        public StringNode last;
-        public StringNode next;
+        public readonly string S;
+        public StringNode Last;
+        public StringNode Next;
 
         public StringNode(string s)
         {
-            this.s = s;
-            last = this;
+            S = s;
+            Last = this;
         }
 
-        public void Append(StringNode s)
+        public void Append(StringNode sn)
         {
-            last.next = s;
-            last = s.last;
+            Last.Next = sn;
+            Last = sn.Last;
         }
     }
 }
